@@ -211,6 +211,13 @@ func compareFragments(a, b string) int {
 		return res
 	}
 
+	if lenA > lenB {
+		return 1
+	} else
+	if lenB > lenA {
+		return -1
+	}
+
 	return 0
 }
 
