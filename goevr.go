@@ -20,6 +20,47 @@ func New(str string) EVR {
 	}
 }
 
+func (evr EVR) compare(aevr EVR) (result int) {
+	result = compareFragments(evr.Epoch, aevr.Epoch)
+	if result != 0 {
+		return
+	}
+
+	result = compareFragments(evr.Version, aevr.Version)
+	if result != 0 {
+		return
+	}
+
+	result = compareFragments(evr.Release, aevr.Release)
+	return
+}
+
+// evr greater than aevr
+func (evr EVR) GT(aevr EVR) bool {
+	return evr.compare(aevr) > 0
+}
+
+func (evr EVR) GTE(aevr EVR) bool {
+	return evr.compare(aevr) >= 0
+}
+
+func (evr EVR) LT(aevr EVR) bool {
+	return evr.compare(aevr) < 0
+}
+
+func (evr EVR) LTE(aevr EVR) bool {
+	return evr.compare(aevr) <= 0
+}
+
+func (evr EVR) EQ(aevr EVR) bool {
+	return evr.compare(aevr) == 0
+}
+
+func (evr EVR) NE(aevr EVR) bool {
+	return evr.compare(aevr) != 0
+}
+
+
 type segment struct {
 	Elements string
 	IsNum bool

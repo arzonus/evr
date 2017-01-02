@@ -240,7 +240,7 @@ func TestCompareFragments(t *testing.T) {
 	}
 }
 
-func TestCompareGTTrue(t *testing.T) {
+func TestGT(t *testing.T) {
 	const (
 		a = "1.8.8"
 		b = "1.8.7"
@@ -251,7 +251,7 @@ func TestCompareGTTrue(t *testing.T) {
 	}
 }
 
-func TestCompareGTETrue(t *testing.T) {
+func TestGTE(t *testing.T) {
 	const (
 		a = "1.8.7"
 		b = "1.8.7"
@@ -261,7 +261,7 @@ func TestCompareGTETrue(t *testing.T) {
 		t.Fatal("a is not GTE b", a, b)
 	}
 }
-func TestCompareLTTrue(t *testing.T) {
+func TestLT(t *testing.T) {
 	const (
 		a = "1.8.6"
 		b = "1.8.7"
@@ -271,7 +271,7 @@ func TestCompareLTTrue(t *testing.T) {
 		t.Fatal("a is not LT b", a, b)
 	}
 }
-func TestCompareLTETrue(t *testing.T) {
+func TestLTE(t *testing.T) {
 	const (
 		a = "1.8.7"
 		b = "1.8.7"
@@ -281,7 +281,7 @@ func TestCompareLTETrue(t *testing.T) {
 		t.Fatal("a is not LTE b", a, b)
 	}
 }
-func TestCompareEQTrue(t *testing.T) {
+func TestEQ(t *testing.T) {
 	const (
 		a = "1.8.7"
 		b = "1.8.7"
@@ -291,13 +291,83 @@ func TestCompareEQTrue(t *testing.T) {
 		t.Fatal("a is not EQ b", a, b)
 	}
 }
-func TestCompareNETrue(t *testing.T) {
+func TestNE(t *testing.T) {
 	const (
 		a = "1.8.3"
 		b = "1.8.7"
 	)
 
 	if !NE(a, b) {
+		t.Fatal("a is not NE b", a, b)
+	}
+}
+
+
+
+
+
+func TestEVR_GT(t *testing.T) {
+	var (
+		a = New("0:6.0-17+deb7u2")
+		b = New("6.0-16+deb8u2")
+	)
+
+	if !a.GT(b) {
+		t.Fatal("a is not GT b", a, b)
+	}
+}
+
+func TestEVR_GTE(t *testing.T) {
+	var (
+		a = New("0:6.0-17+deb7u2")
+		b = New("6.0-16+deb8u2")
+	)
+
+	if !a.GTE(b) {
+		t.Fatal("a is not GTE b", a, b)
+	}
+}
+
+func TestEVR_LT(t *testing.T) {
+	var (
+		a = New("0:6.0-8+deb7u2")
+		b = New("6.0-16+deb8u2")
+	)
+
+	if !a.LT(b) {
+		t.Fatal("a is not LT b", a, b)
+	}
+}
+
+func TestEVR_LTE(t *testing.T) {
+	var (
+		a = New("0:6.0-8+deb7u2")
+		b = New("6.0-16+deb8u2")
+	)
+
+	if !a.LTE(b) {
+		t.Fatal("a is not LTE b", a, b)
+	}
+}
+
+func TestEVR_EQ(t *testing.T) {
+	var (
+		a = New("0:6.0-8+deb7u2")
+		b = New("6.0-8+deb7u2")
+	)
+
+	if !a.EQ(b) {
+		t.Fatal("a is not EQ b", a, b)
+	}
+}
+
+func TestEVR_NE(t *testing.T) {
+	var (
+		a = New("0:6.0-8+deb7u2")
+		b = New("6.0-16+deb8u2")
+	)
+
+	if !a.NE(b) {
 		t.Fatal("a is not NE b", a, b)
 	}
 }
