@@ -1,6 +1,9 @@
 package goevr
 
-import "testing"
+import (
+	"testing"
+	"reflect"
+)
 
 func TestGetEAndVRWithoutEpoch(t *testing.T) {
 
@@ -10,7 +13,7 @@ func TestGetEAndVRWithoutEpoch(t *testing.T) {
 		versionrelease  = `1.12.1+dfsg-19+deb8u2`
 	)
 
-	e, vr := GetEAndVR(evrWithoutEpoch)
+	e, vr := getEAndVR(evrWithoutEpoch)
 
 	if e != epoch {
 		t.Fatal("versionrelease are not equals: ", e, epoch)
@@ -30,7 +33,7 @@ func TestGetEAndVRWithEpoch(t *testing.T) {
 		versionrelease = `1.12.1+dfsg-19+deb8u2`
 	)
 
-	e, vr := GetEAndVR(evrWithEpoch)
+	e, vr := getEAndVR(evrWithEpoch)
 
 	if e != epoch {
 		t.Fatal("versionrelease are not equals: ", e, epoch)
@@ -49,7 +52,7 @@ func TestGetVAndRWithoutRelease(t *testing.T) {
 		release = ""
 	)
 
-	v, r := GetVAndR(vr)
+	v, r := getVAndR(vr)
 	if v != version {
 		t.Fatal("versions are not equals: ", v, version)
 	}
@@ -65,7 +68,7 @@ func TestGetVAndRWithRelease(t *testing.T) {
 		release = "19+deb8u2"
 	)
 
-	v, r := GetVAndR(vr)
+	v, r := getVAndR(vr)
 	if v != version {
 		t.Fatal("versions are not equals: ", v, version)
 	}
@@ -81,7 +84,7 @@ func TestGetVAndRWithReleaseAndDoubleVersion(t *testing.T) {
 		release = "19+deb8u2"
 	)
 
-	v, r := GetVAndR(vr)
+	v, r := getVAndR(vr)
 	if v != version {
 		t.Fatal("versions are not equals: ", v, version)
 	}
@@ -192,5 +195,109 @@ func TestParseEmptyString(t *testing.T) {
 	}
 	if r != release {
 		t.Fatal("releases are not equals: ", r, release)
+	}
+}
+
+func TestGetSegments(t *testing.T) {
+	const (
+		evr     = "1.12bdfd"
+	)
+
+	var segments = []segment{
+		segment{
+			Elements: "1",
+			IsNum: true,
+		},
+		segment{
+			Elements: ".",
+			IsNum: false,
+		},
+		segment{
+			Elements: "12",
+			IsNum: true,
+		},
+		segment{
+			Elements: "bdfd",
+			IsNum: false,
+		},
+
+	}
+
+	if !reflect.DeepEqual(getSegments(evr), segments) {
+		t.Fatal("segments are not equals: ", segments, getSegments(evr))
+	}
+}
+
+func TestCompareFragments(t *testing.T) {
+
+	const (
+		a = "1.8.7"
+		b = "1.8.7"
+	)
+
+	if compareFragments(a, b) != 0 {
+		t.Fatal("a, b are not equals: ", a, b)
+	}
+}
+
+func TestCompareGTTrue(t *testing.T) {
+	const (
+		a = "1.8.8"
+		b = "1.8.7"
+	)
+
+	if !GT(a, b) {
+		t.Fatal("a is not GT b", a, b)
+	}
+}
+
+func TestCompareGTETrue(t *testing.T) {
+	const (
+		a = "1.8.7"
+		b = "1.8.7"
+	)
+
+	if !GTE(a, b) {
+		t.Fatal("a is not GTE b", a, b)
+	}
+}
+func TestCompareLTTrue(t *testing.T) {
+	const (
+		a = "1.8.6"
+		b = "1.8.7"
+	)
+
+	if !LT(a, b) {
+		t.Fatal("a is not LT b", a, b)
+	}
+}
+func TestCompareLTETrue(t *testing.T) {
+	const (
+		a = "1.8.7"
+		b = "1.8.7"
+	)
+
+	if !LTE(a, b) {
+		t.Fatal("a is not LTE b", a, b)
+	}
+}
+func TestCompareEQTrue(t *testing.T) {
+	const (
+		a = "1.8.7"
+		b = "1.8.7"
+	)
+
+	if !EQ(a, b) {
+		t.Fatal("a is not EQ b", a, b)
+	}
+}
+func TestCompareNETrue(t *testing.T) {
+	const (
+		a = "1.8.3"
+		b = "1.8.7"
+	)
+
+	if !NE(a, b) {
+		t.Fatal("a is not NE b", a, b)
 	}
 }
