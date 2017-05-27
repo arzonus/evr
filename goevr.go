@@ -11,6 +11,10 @@ type EVR struct {
 	Release string
 }
 
+func (evr EVR) String() string {
+	return evr.Epoch + ":" + evr.Version + "-" + evr.Release
+}
+
 func New(str string) EVR {
 	e, v, r := Parse(str)
 	return EVR{
@@ -35,29 +39,34 @@ func (evr EVR) compare(aevr EVR) (result int) {
 	return
 }
 
-// evr greater than aevr
-func (evr EVR) GT(aevr EVR) bool {
-	return evr.compare(aevr) > 0
+// evr greater than another evr
+func (evr EVR) GT(e EVR) bool {
+	return evr.compare(e) > 0
 }
 
-func (evr EVR) GTE(aevr EVR) bool {
-	return evr.compare(aevr) >= 0
+// evr greater or equal than another evr
+func (evr EVR) GTE(e EVR) bool {
+	return evr.compare(e) >= 0
 }
 
-func (evr EVR) LT(aevr EVR) bool {
-	return evr.compare(aevr) < 0
+// evr less than another evr
+func (evr EVR) LT(e EVR) bool {
+	return evr.compare(e) < 0
 }
 
-func (evr EVR) LTE(aevr EVR) bool {
-	return evr.compare(aevr) <= 0
+// evr less or equal than another evr
+func (evr EVR) LTE(e EVR) bool {
+	return evr.compare(e) <= 0
 }
 
-func (evr EVR) EQ(aevr EVR) bool {
-	return evr.compare(aevr) == 0
+// evr equals another evr
+func (evr EVR) EQ(e EVR) bool {
+	return evr.compare(e) == 0
 }
 
-func (evr EVR) NE(aevr EVR) bool {
-	return evr.compare(aevr) != 0
+// evr doensn't equal another evr
+func (evr EVR) NE(e EVR) bool {
+	return evr.compare(e) != 0
 }
 
 
@@ -66,27 +75,32 @@ type segment struct {
 	IsNum bool
 }
 
-
+// return true, if a greater than b
 func GT(a, b string) bool {
 	return compareFragments(a, b) > 0
 }
 
+// return true, if a greater or equal than b
 func GTE(a, b string) bool {
 	return compareFragments(a, b) >= 0
 }
 
+// return true, if a less than b
 func LT(a, b string) bool {
 	return compareFragments(a, b) < 0
 }
 
+// return true, if a less or equal than b
 func LTE(a, b string) bool {
 	return compareFragments(a, b) <= 0
 }
 
+// return true, if a equals b
 func EQ(a, b string) bool {
 	return compareFragments(a, b) == 0
 }
 
+// return true, if a doesn't equal b
 func NE(a, b string) bool {
 	return compareFragments(a, b) != 0
 }
@@ -221,7 +235,7 @@ func compareFragments(a, b string) int {
 	return 0
 }
 
-// Parse string to epoch, version and release
+// Parsing string to epoch, version and release
 func Parse(str string) (e, v, r string) {
 	e, vr := getEAndVR(str)
 	v, r = getVAndR(vr)
